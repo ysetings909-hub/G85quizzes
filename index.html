@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#f6f8fd"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Matter Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{font:500 20px/1.35 'Plus Jakarta Sans',system-ui,sans-serif;color:#1e2340;background:linear-gradient(160deg,#f6f8fd,#eef1fb 50%,#fbf3fa);overflow:hidden;position:relative}
+.blob{position:fixed;width:60vmax;height:60vmax;border-radius:50%;filter:blur(70px);opacity:.35;z-index:0;animation:fl 14s ease-in-out infinite alternate}
+.b1{background:#a5b4fc;top:-20vmax;left:-20vmax}.b2{background:#f9a8d4;bottom:-22vmax;right:-20vmax;animation-delay:-6s}
+@keyframes fl{to{transform:translate(8vmax,6vmax)}}
+#app{position:relative;z-index:1;height:100dvh;overflow-y:auto;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.w{max-width:640px;margin:0 auto}
+button{font:inherit;cursor:pointer;border:0}
+:focus-visible{outline:3px solid #4338ca;outline-offset:2px}
+.hero{background:linear-gradient(135deg,#6366f1,#a855f7 55%,#ec4899);color:#fff;border-radius:28px;padding:22px;display:flex;align-items:center;gap:12px;box-shadow:0 14px 30px #6366f144}
+.hero h1{margin:0;font-size:1.7rem;line-height:1.1;font-weight:800}.hero p{margin:4px 0 0;opacity:.92;font-size:.85rem}.hero .em{font-size:3.4rem}
+.ringbox{display:flex;justify-content:center;margin:18px 0 8px}
+.ring{position:relative;width:190px;height:190px}.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring b{font-size:3rem;line-height:1;font-weight:800}.ring span{font-size:.9rem;color:#6b7194;font-weight:700}
+.fg{transition:stroke-dashoffset 1s cubic-bezier(.3,.8,.3,1)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+.chip{background:#fff;border-radius:99px;padding:6px 14px;font-size:.75rem;font-weight:700;box-shadow:0 2px 8px #1e234014}
+.resume{background:#fff;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 6px 18px #1e234018;border:2px solid #c7d2fe}
+.resume p{margin:0 0 10px;font-weight:800}.row{display:flex;gap:8px}
+.btn{flex:1;padding:12px 16px;border-radius:16px;font-weight:800;font-size:.85rem;color:#fff;background:linear-gradient(135deg,#6366f1,#a855f7)}
+.btn.o{background:#eef0fa;color:#3f4580}
+.qc{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border-radius:22px;padding:14px 14px 14px 20px;margin-bottom:12px;position:relative;overflow:hidden;box-shadow:0 6px 18px #1e234016;transition:transform .15s}
+.qc:hover{transform:translateY(-2px)}.qc:active{transform:scale(.98)}
+.qc:before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--g)}
+.tile{width:54px;height:54px;border-radius:16px;background:var(--g);display:grid;place-items:center;font-size:1.7rem;flex:none}
+.qc .t{flex:1;min-width:0}.qc b{display:block;font-size:.95rem;font-weight:800;line-height:1.2}.qc small{color:#6b7194;font-size:.72rem;font-weight:700}
+.qc .bs{text-align:right;font-size:.7rem;font-weight:800;color:#6b7194;white-space:nowrap}.qc .bs i{font-style:normal;display:block;font-size:.8rem;letter-spacing:-1px}
+.ar{font-size:1.8rem;color:#a0a6c8;font-weight:700}
+.foot{text-align:center;margin-top:10px}.foot button{background:none;color:#6b7194;text-decoration:underline;font-size:.75rem;font-weight:700}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.pill{background:#fff;border-radius:99px;padding:9px 16px;font-weight:800;font-size:.8rem;color:#3f4580;box-shadow:0 2px 8px #1e234014}
+.sp{display:flex;gap:6px;align-items:center}.sp .pill{text-align:center;line-height:1.05;padding:8px 12px}.sp .tot{font-size:.65rem;padding:6px 10px;color:#6b7194}
+.pb{height:16px;background:#e3e7f6;border-radius:99px;overflow:hidden;margin-bottom:14px}.pb div{height:100%;border-radius:99px;background:var(--g);transition:width .4s}
+.card{background:var(--g);color:#fff;border-radius:28px;padding:20px 20px 24px;position:relative;overflow:hidden;margin-bottom:14px;box-shadow:0 14px 28px #1e23402a;min-height:170px}
+.card:before{content:"?";position:absolute;right:6px;bottom:-40px;font-size:11rem;font-weight:800;opacity:.13;line-height:1}
+.card:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:#fff;opacity:.12;top:-40px;left:-30px}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;position:relative;z-index:1}
+.glass{background:#ffffff33;backdrop-filter:blur(6px);border-radius:99px;padding:5px 12px;font-size:.7rem;font-weight:800}
+.card h2{margin:0;font-size:1.55rem;line-height:1.25;font-weight:800;position:relative;z-index:1}
+.ans{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border-radius:20px;padding:12px 14px;margin-bottom:10px;box-shadow:0 5px 14px #1e23401a;position:relative;transition:transform .15s,opacity .3s;font-weight:700;font-size:.9rem;color:#1e2340}
+.ans:hover:not(:disabled){transform:translateY(-3px)}.ans:active:not(:disabled){transform:scale(.97)}
+.L{width:40px;height:40px;border-radius:12px;color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.L0{background:linear-gradient(135deg,#6366f1,#818cf8)}.L1{background:linear-gradient(135deg,#ec4899,#f472b6)}.L2{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
+.ans:disabled{cursor:default}.ans.ok{background:#16a34a;color:#fff;animation:bn .5s}.ans.no{background:#dc2626;color:#fff;animation:sh .45s}.ans.fade{opacity:.4}
+.ans.ok .L,.ans.no .L{background:#ffffff40}
+.mk{margin-left:auto;font-size:1.3rem;font-weight:800}
+@keyframes bn{30%{transform:scale(1.05)}60%{transform:scale(.98)}}
+@keyframes sh{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}
+.fp{position:absolute;right:16%;top:20%;font-weight:800;font-size:1.2rem;color:#fff;text-shadow:0 1px 6px #0006;animation:rs .8s forwards;pointer-events:none}
+@keyframes rs{to{transform:translateY(-44px);opacity:0}}
+.ban{border-radius:18px;padding:12px 16px;font-weight:800;font-size:.9rem;margin:4px 0 10px}
+.ban.g{background:#dcfce7;color:#14532d}.ban.r{background:#ffedd5;color:#9a3412}.ban.f{background:#fee2e2;color:#991b1b}
+.next{width:100%;padding:16px;border-radius:20px;font-weight:800;font-size:1rem;color:#fff;background:var(--g);box-shadow:0 8px 18px #1e234030}
+.rate{background:#fff;border-radius:30px;padding:26px 20px;text-align:center;box-shadow:0 14px 30px #1e234022;margin-top:20px}
+.rate .re{font-size:3.4rem}.rate h2{margin:6px 0;font-size:1.8rem;font-weight:800}.rate .stars{font-size:1.8rem;margin:6px 0}.rate p{margin:8px 0 18px;color:#4a5080;font-size:.9rem}
+.mod{position:fixed;inset:0;background:#1e234088;display:grid;place-items:center;z-index:9;padding:20px}
+.mod div{background:#fff;border-radius:24px;padding:22px;max-width:340px;text-align:center}.mod p{margin:0 0 16px;font-weight:700;font-size:.95rem}
+html{font-size:22px}.w{max-width:720px}
+.hero{padding:28px}.hero h1{font-size:2rem}.hero p{font-size:.95rem}
+.chip{font-size:.85rem;padding:8px 16px}
+.qc{padding:20px 18px 20px 26px;border-radius:26px;gap:14px;margin-bottom:16px}.qc:before{width:10px}
+.tile{width:70px;height:70px;border-radius:20px;font-size:2.1rem}.qc b{font-size:1.15rem}.qc small{font-size:.85rem}.qc .bs{font-size:.85rem}.qc .bs i{font-size:1rem}.ar{font-size:2.2rem}
+.btn{padding:16px 18px;font-size:1rem}.pill{font-size:.95rem;padding:11px 18px}.sp .pill{font-size:.9rem}.sp .tot{font-size:.75rem}
+.card{padding:28px 24px 32px;min-height:220px;border-radius:30px}.card h2{font-size:1.85rem}.glass{font-size:.85rem;padding:6px 14px}
+.ans{padding:20px 18px;gap:16px;border-radius:24px;margin-bottom:14px;font-size:1.1rem}.L{width:52px;height:52px;border-radius:15px;font-size:1.2rem}.mk{font-size:1.6rem}
+.ban{font-size:1.05rem;padding:16px 18px}.next{padding:20px;font-size:1.2rem}
+.rate h2{font-size:2.1rem}.rate p{font-size:1.05rem}
+.fp{right:10%;top:8%;font-size:1.9rem;padding:6px 18px;border-radius:99px;background:linear-gradient(135deg,#fde047,#f59e0b);color:#7c2d12;text-shadow:none;box-shadow:0 0 0 4px #fff8,0 8px 22px #f59e0baa;z-index:5;white-space:nowrap;animation:pts 1.1s cubic-bezier(.2,.8,.3,1) forwards}
+.fp:before,.fp:after{content:"✨";position:absolute;font-size:1.2rem;animation:sp 1.1s forwards}.fp:before{left:-16px;top:-12px}.fp:after{right:-14px;bottom:-12px}
+@keyframes pts{0%{transform:scale(.2) translateY(10px);opacity:0}22%{transform:scale(1.35) rotate(-4deg);opacity:1}40%{transform:scale(1) rotate(0)}75%{opacity:1}100%{transform:translateY(-80px) scale(1.05);opacity:0}}
+@keyframes sp{0%{opacity:0;transform:scale(0)}30%{opacity:1;transform:scale(1.4) rotate(20deg)}100%{opacity:0;transform:scale(.6) rotate(90deg)}}
+@media(max-width:420px){.ring{width:170px;height:170px}.card h2{font-size:1.6rem}}
+html{font-size:20px}.w{max-width:680px}
+.card{min-height:200px;padding:24px 22px 28px}.ans{padding:17px 16px;margin-bottom:12px}.L{width:46px;height:46px}.tile{width:62px;height:62px}.qc{padding:17px 16px 17px 24px}
+.fp{font-size:2.5rem;padding:8px 22px;right:8%}.fp:before,.fp:after{font-size:1.6rem}
+.rate{position:relative;margin-top:56px;padding:64px 22px 26px;border:3px solid transparent;border-radius:38px;background:linear-gradient(#fff,#fbfbff) padding-box,var(--g) border-box;box-shadow:0 34px 60px -24px #1e234055,0 0 0 8px #ffffff80}
+.rate .re{position:absolute;top:-48px;left:50%;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;background:var(--g);border:5px solid #fff;display:grid;place-items:center;font-size:2.8rem;box-shadow:0 14px 28px #1e234040;animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+.rtag{display:inline-block;background:#f1f3fb;color:#4a5080;font-weight:800;font-size:.8rem;border-radius:99px;padding:6px 16px;margin-bottom:6px}
+.rate .ring{filter:drop-shadow(0 10px 20px #1e23402a)}
+.rate .ring b{background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:3.2rem!important}
+.rate .stars{display:flex;justify-content:center;gap:4px;margin:10px 0 4px}
+.rate .stars i{font-style:normal;font-size:2.5rem;line-height:1;color:#e3e7f6}
+.rate .stars i.on{background:linear-gradient(180deg,#fde68a,#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 5px #f59e0b88);animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}
+.rate h2{font-size:2.1rem;letter-spacing:-.02em;margin:4px 0}.rate p{margin:4px auto 16px;max-width:30ch}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);background:#f4f6fd;border-radius:22px;padding:14px 4px;margin-bottom:18px}
+.stats div{border-right:2px solid #e3e7f6}.stats div:last-child{border:0}
+.stats b{display:block;font-size:1.5rem;font-weight:800;line-height:1.1}.stats small{font-size:.7rem;color:#6b7194;font-weight:700}
+.rate .btn{box-shadow:0 10px 20px -8px #1e234055;padding:17px}
+@keyframes pop{from{transform:translateX(-50%) scale(0);opacity:0}to{opacity:1}}
+.rate .stars i.on{animation-name:spop}@keyframes spop{from{transform:scale(0) rotate(-60deg);opacity:0}to{transform:none;opacity:1}}
+.fp{font-size:2.1rem;padding:6px 18px}.fp:before,.fp:after{font-size:1.3rem}
+.rate{background:linear-gradient(160deg,#1a1f4a,#0b0e26) padding-box,var(--g) border-box;box-shadow:0 40px 70px -26px #0b0e26cc,0 0 0 8px #ffffff80;color:#fff}
+.rate>:not(.re){position:relative;z-index:1}
+.rate:before{content:"";position:absolute;left:50%;top:70px;width:280px;height:280px;transform:translateX(-50%);background:var(--g);filter:blur(80px);opacity:.45;border-radius:50%}
+.rate:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 35%,#ffffff26 50%,transparent 65%);background-size:250% 100%;background-position:150% 0;animation:sheen 1.8s .5s ease-out forwards}
+@keyframes sheen{to{background-position:-50% 0}}
+.rate .re{border-color:#1a1f4a;box-shadow:0 0 0 3px #ffffff30,0 16px 32px #0b0e2699}
+.rtag{background:#ffffff14;color:#dfe3ff;border:1px solid #ffffff1f}
+.rate .ring circle:first-of-type{stroke:#ffffff1f}.rate .ring{filter:drop-shadow(0 0 18px #ffffff2e)}
+.rate .ring b{background:linear-gradient(180deg,#fff,#c7d2fe);-webkit-background-clip:text;background-clip:text;font-size:3.6rem!important}
+.rate .ring span{color:#aab1de}
+.rate .stars i{color:#ffffff22}
+.rate h2{color:#fff}.rate p{color:#b8bee6}
+.stats{background:#ffffff0f;border:1px solid #ffffff1a}.stats div{border-color:#ffffff1a}.stats small{color:#aab1de}
+.rate .btn.o{background:#ffffff14;color:#fff;border:1px solid #ffffff26}
+.rate .btn:not(.o){box-shadow:0 12px 26px -8px #000a}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.stats div:nth-child(1) b{color:#4ade80}.stats div:nth-child(2) b{color:#f87171}.stats div:nth-child(3) b{color:#fbbf24}
+</style></head><body><div class="blob b1"></div><div class="blob b2"></div><main id="app"></main>
+<script>
+const G=[['#6366f1','#a855f7'],['#f97316','#ef4444'],['#14b8a6','#06b6d4'],['#22c55e','#84cc16'],['#ec4899','#d946ef']];
+const N=['Quiz 1','Quiz 2','Quiz 3','Quiz 4','Quiz 5'],IC=['🎯','🚀','🧩','💡','🏅'];
+// [question, correct, wrong1, wrong2]
+const T=[[
+["Anything that has mass and occupies space is called…","Matter","Energy","Light"],
+["Which of these is NOT matter?","Music","Iron","Air"],
+["Which pair can flow?","Water and oxygen","Wood and iron","Iron and air"],
+["Which has a definite shape?","Ice","Air","Oil"],
+["Air is characterized by…","having no definite shape","having a definite volume","having no mass"],
+["A solid has…","a fixed shape and volume","no fixed volume or shape","a fixed shape, variable volume"],
+["Solids and liquids both…","have a fixed volume","can flow","are compressible"],
+["Which are fluids?","Water vapour and liquid water","Ice and liquid water","Oil and iron"],
+["Compression of matter means…","a decrease in its volume","an increase in its volume","a change in its mass"],
+["Fluids are substances that…","can flow and take the container's shape","have a fixed shape","cannot flow"],
+["Which one is compressible?","Air","Water","Iron"],
+["The ability of fluids to flow easily is…","fluidity","diffusion","compressibility"],
+["When viscosity increases, fluidity…","decreases","increases","stays the same"],
+["Which has a definite volume but no definite shape?","Water","Oxygen","Iron"],
+["Which has no definite volume or shape?","Oxygen","Oil","Wood"],
+["Matter in the liquid and gas states is called…","fluids","solids","plasma"],
+["Which pair is incompressible?","Iron and oil","Oil and air","Air and hydrogen"],
+["The interparticle spaces are greatest in…","oxygen","iron","water"],
+["Pressing the piston on a syringe of sand, the sand's volume…","does not change","decreases","increases"],
+["Honey flows slower than water because it is…","more viscous","lighter","more compressible"]],[
+["Movement of particles from high to low concentration is…","diffusion","compression","fluidity"],
+["Diffusion is greatest through…","air","water","wood"],
+["Ink spreads fastest in water at…","80°C","0°C","20°C"],
+["Raising the medium's temperature makes diffusion…","faster","slower","unchanged"],
+["Diffusion through solids is…","very slow","very fast","moderate"],
+["Lighter particles diffuse…","faster","slower","at the same speed"],
+["Perfume smell spreads across a room due to the particles'…","random motion","strong attraction","compressibility"],
+["A potassium permanganate crystal in water…","slowly turns the water purple","does nothing","sinks and stays put"],
+["Which gas diffuses fastest?","Hydrogen","Oxygen","Carbon dioxide"],
+["Smoke spreads through air because its particles…","move randomly","are at rest","attract strongly"],
+["Diffusion through liquids is…","moderate","very fast","very slow"],
+["Diffusion speed depends on the medium's temperature and the…","mass of diffusing particles","colour of the container","container's shape"],
+["Which does NOT affect diffusion speed?","Colour of the container","Temperature","Mass of particles"],
+["Table salt dissolving in water happens by…","diffusion","compression","freezing"],
+["You open perfume in a room's corner. Soon…","the smell reaches the whole room","it stays in the corner","nothing spreads"],
+["Fastest diffusion is through…","gases","liquids","solids"],
+["Diffusion in fluids happens because particles are…","in continuous motion","at rest","strongly attracted"],
+["Dye spreads slowest in water at…","5°C","30°C","60°C"],
+["Diffusion in gases is fast because forces are…","very weak","very strong","moderate"],
+["Compared with air, diffusion in water is…","slower","faster","the same"]],[
+["A simplified representation of very small or very large things is…","modelling","diffusion","plasma"],
+["The theory that explains the behaviour of matter is the…","particle theory","gravity theory","wave theory"],
+["Random motion of large particles suspended in a fluid is…","Brownian motion","diffusion","compression"],
+["Brownian motion is attributed to…","Robert Brown","Isaac Newton","Marie Curie"],
+["Brownian motion is caused by collisions between…","fluid particles and suspended particles","two solids","gravity and air"],
+["We can't see particles of matter because they are…","very small","vibrating","moving freely"],
+["Particles store ___ energy due to attraction forces.","potential","kinetic","sound"],
+["Continuous motion gives particles ___ energy.","kinetic","potential","none"],
+["Particles of the same substance are…","identical","all different","random sizes"],
+["Gas particles move with…","random motion","vibrational motion","circular motion"],
+["Solid particles move with…","vibrational motion","random motion","free motion"],
+["A pollen grain in water moves…","randomly in all directions","in one direction","not at all"],
+["Attraction forces are greatest in…","iron","water","air"],
+["In gases, attraction forces are…","very weak","very strong","moderate"],
+["Gases compress easily because…","the spaces between particles are large","particles are soft","forces are strong"],
+["Spaces between iron particles are…","very small","very large","non-existent"],
+["Compared with oxygen, water molecules are…","slower and closer together","faster and farther apart","slower and farther apart"],
+["Which describes solid particles?","Vibrate in fixed positions","Move freely","Move randomly and fast"],
+["Liquid particles…","move relatively freely","stay fixed","never move"],
+["An assumption of the particle theory is that matter…","is made of tiny particles","has particles at rest","has no spaces"]],[
+["The fourth state of matter is…","plasma","liquid","light"],
+["Plasma contains…","positive ions and free electrons","neutral atoms only","only molecules"],
+["Gases become plasma when they pass through a…","strong electric field","cold room","closed bottle"],
+["Which is NOT an example of plasma?","Sand","Lightning","Aurora"],
+["The Sun is in the ___ state.","plasma","solid","liquid"],
+["Most matter in outer space is in the ___ state.","plasma","solid","liquid"],
+["The polar lights (aurora) are an example of…","plasma","a liquid","a solid"],
+["Plasma is used in air conditioners to…","purify air","heat water","freeze food"],
+["In air conditioning, charged gas ions…","attract pollutant particles, cleaning the air","make the air dirtier","add humidity"],
+["Plasma's electrical conductivity is…","high","low","zero"],
+["The four states of matter are solid, liquid, gas and…","plasma","steam","foam"],
+["Plasma is found in…","stars and lightning","rocks and water","ice and snow"],
+["Which state contains charged particles?","Plasma","Gas","Solid"],
+["Gases passing through a strong electric field become…","ionized","frozen","heavier"],
+["Gases and plasma differ in…","electric charge","colour only","mass only"],
+["Cosmic nebulae are in the ___ state.","plasma","solid","liquid"],
+["Plasma conducts electricity because it has…","free ions and electrons","no particles","cold particles"],
+["Which has the highest electrical conductivity?","Plasma","Ice","Air"],
+["Which natural phenomenon is plasma?","Aurora","Rainbow","Snow"],
+["Air is purified indoors using matter in the ___ state.","plasma","solid","liquid"]],[
+["Air and water are similar in that they both…","have mass","can be seen","have a fixed shape"],
+["Pressing a syringe holding water and air, the volumes…","water stays, air decreases","both decrease","both stay the same"],
+["Tilted container: X changes shape, Y keeps it. So…","X is liquid, Y is solid","X is solid, Y is liquid","both are liquid"],
+["Which has no mass, so is not matter?","Light","Iron","Air"],
+["Which has mass and is compressible?","Carbon dioxide","Juice","Iron"],
+["Which is incompressible with no definite shape?","Juice","Iron","Air"],
+["Iron is incompressible with a definite shape, so it is a…","solid","liquid","gas"],
+["Why doesn't sand's volume change when the piston is pressed?","Its particles are very close","It is a gas","It is a liquid"],
+["Water and air in a syringe both…","can flow","have a fixed shape","are solids"],
+["Air, water and sand all…","have mass and occupy space","can be compressed","can flow"],
+["Which group is fluids?","Air and raindrops","Iron and ice","Ice and wood"],
+["Higher viscosity means a ___ flow speed.","lower","higher","identical"],
+["No definite shape and no definite volume describes a…","gas","liquid","solid"],
+["Indefinite shape but definite volume describes a…","liquid","solid","gas"],
+["Weakly attracted particles moving relatively freely are a…","liquid","solid","plasma"],
+["Particles vibrating in fixed positions are a…","solid","liquid","gas"],
+["Hydrogen vs iron: which statement is right?","Hydrogen compresses, iron doesn't","Both compress","Neither compresses"],
+["Ice vs water vapour:","ice has a definite shape, vapour doesn't","both have definite shape","neither has a definite shape"],
+["Strongest attraction forces are in…","iron","oil","oxygen"],
+["Pressing a sealed empty plastic bottle, the air's volume…","decreases","increases","stays the same"]]];
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const Q=[0,1,2,3,4].map(k=>{const r=rng(k+7),a=[].concat(...T.map(t=>t.slice(4*k,4*k+4)));for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a});
+const PR=["Awesome!","Brilliant!","Nailed it!","Super smart!","Well done!"],PE=["🌟","🎯","💥","🧠","👏"],WR=["Not quite!","Good try!","So close!","Learning moment!"];
+const $=s=>document.querySelector(s),app=$('#app');
+let S=load(),view='home',qi=0,msg=null,fs=false,lock=0;
+function load(){try{const s=JSON.parse(localStorage.getItem('mq6'));if(s&&s.p)return s}catch(e){}return{p:[null,null,null,null,null],b:[-1,-1,-1,-1,-1],c:null}}
+function save(){try{localStorage.setItem('mq6',JSON.stringify(S))}catch(e){}}
+const pts=i=>5*Math.max(S.b[i],S.p[i]?S.p[i].s:0,0),total=()=>[0,1,2,3,4].reduce((a,i)=>a+pts(i),0);
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const stars=s=>s>=18?5:s>=15?4:s>=12?3:s>=8?2:1,LB=['','Bad','Not good','Good','Very good!','Excellent!'],RE=['','📖','💪','👍','🎉','🏆'];
+const MS=['','Keep studying — you can do better next time!','Getting there. Review the lesson and try again!','Nice work, a few more to master.','Great job — almost perfect!','Outstanding! You really know your matter.'];
+const sg=n=>'⭐'.repeat(n)+'☆'.repeat(5-n);
+document.addEventListener('pointerdown',()=>{if(fs)return;fs=true;try{const e=document.documentElement;(e.requestFullscreen||e.webkitRequestFullscreen||(()=>0)).call(e)}catch(x){}},{once:true});
+const gv=i=>`--g:linear-gradient(135deg,${G[i][0]},${G[i][1]})`;
+function home(){
+ view='home';const t=total(),C=2*Math.PI*78,done=S.b.filter(x=>x>=0).length,c=S.c,p=c!==null&&S.p[c];
+ const res=p&&!p.fin&&(p.n>0||p.a[0]>=0);
+ app.innerHTML=`<div class="w"><div class="hero"><div><h1>Matter Quiz</h1><p>Science review</p></div><div class="em" style="margin-left:auto">🔬</div></div>
+ <div class="ringbox"><div class="ring"><svg viewBox="0 0 190 190"><defs><linearGradient id="rg"><stop offset="0" stop-color="#6366f1"/><stop offset=".5" stop-color="#ec4899"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs><circle cx="95" cy="95" r="78" fill="none" stroke="#e3e7f6" stroke-width="16"/><circle class="fg" id="fg" cx="95" cy="95" r="78" fill="none" stroke="url(#rg)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="c"><b>${t}</b><span>/500</span></div></div></div>
+ <div class="chips"><span class="chip">5 quizzes</span><span class="chip">20 questions each</span><span class="chip">✅ ${done}/5 done</span></div>
+ ${res?`<div class="resume"><p>Continue Quiz ${c+1} · Question ${Math.min(p.n+1+(p.a[p.n]>=0?1:0),20)} of 20</p><div class="row"><button class="btn" data-r="1">Resume</button><button class="btn o" data-so="1">Start over</button></div></div>`:''}
+ ${N.map((n,i)=>{const b=S.b[i];return`<button class="qc" style="${gv(i)}" data-q="${i}"><div class="tile">${IC[i]}</div><div class="t"><b>${n}</b><small>20 questions</small></div><div class="bs">${b>=0?`<i>${'⭐'.repeat(stars(b))}</i>${b}/20`:'Not tried'}</div><span class="ar">›</span></button>`}).join('')}
+ <div class="foot"><button data-reset="1">Reset all progress</button></div></div>`;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{const f=$('#fg');if(f)f.style.strokeDashoffset=C*(1-t/500)}));
+ app.onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.q!==undefined)start(+b.dataset.q);
+  else if(b.dataset.r)start(c,true);
+  else if(b.dataset.so){S.p[c]=null;S.c=null;save();home()}
+  else if(b.dataset.reset)modal()}
+}
+function modal(){const m=document.createElement('div');m.className='mod';m.innerHTML='<div role="dialog" aria-label="Confirm reset"><p>Reset all progress? Points, stars and streaks will be cleared.</p><div class="row"><button class="btn o" id="mn">Cancel</button><button class="btn" id="my" style="background:#dc2626">Reset</button></div></div>';document.body.appendChild(m);
+ m.querySelector('#mn').onclick=()=>m.remove();m.querySelector('#my').onclick=()=>{S={p:[null,null,null,null,null],b:[-1,-1,-1,-1,-1],c:null};save();m.remove();home()}}
+function start(i,resume){qi=i;S.c=i;let p=S.p[i];if(p&&!p.fin&&p.a[p.n]>=0){if(p.n<19)p.n++;else{rate();return}}
+ if(!p||p.fin||!resume&&false){}
+ if(!p||p.fin){p=S.p[i]={n:0,o:Array.from({length:20},()=>shuf([0,1,2])),a:Array(20).fill(-1),s:0,k:0,fin:false}}
+ msg=null;save();quiz()}
+function quiz(){
+ view='quiz';lock=Date.now()+450;const i=qi,p=S.p[i],n=p.n,q=Q[i][n],o=p.o[n],a=p.a[n],ans=a>=0;
+ let h=`<div class="w" style="${gv(i)}"><div class="top"><button class="pill" data-h="1">← Quizzes</button><div class="sp"><div class="pill" aria-live="polite">${p.s*5}<br>/100</div><div class="pill tot">${total()}/500<br>total</div></div></div>
+ <div class="pb" role="progressbar" aria-valuemin="0" aria-valuemax="20" aria-valuenow="${n+(ans?1:0)}"><div style="width:${(n+(ans?1:0))/20*100}%"></div></div>
+ <div class="card"><div class="meta"><span class="glass">${IC[i]} ${N[i]}</span><span class="glass">${n+1}/20</span></div><h2>${q[0]}</h2></div>`;
+ o.forEach((k,j)=>{let c='',m='';if(ans){if(k===0){c=' ok';m='✓'}else if(j===a){c=' no';m='✕'}else c=' fade'}
+  h+=`<button class="ans${c}" data-a="${j}" ${ans?'disabled':''}><span class="L L${j}">${'ABC'[j]}</span><span>${q[1+k]}</span><span class="mk">${m}</span>${ans&&j===a&&k===0?'<span class="fp">+5 ⭐</span>':''}</button>`});
+ if(ans){const ok=o[a]===0;if(!msg)msg=ok?`${PE[Math.random()*5|0]} ${PR[Math.random()*5|0]}`:`${WR[Math.random()*4|0]} The answer is: ${q[1]}`;
+  if(ok)h+=`<div class="ban g" role="status">${msg}</div>`;
+  if(ok&&p.k>=3)h+=`<div class="ban f">🔥 ${p.k} in a row!</div>`;
+  if(!ok)h+=`<button class="next" data-n="1">${n===19?'See my rating':'Next →'}</button>`}
+ app.innerHTML=h+'</div>';
+ app.onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.h)home();
+  else if(b.dataset.a!==undefined&&!ans){if(Date.now()<lock)return;const j=+b.dataset.a;p.a[n]=j;if(p.o[n][j]===0){p.s++;p.k++}else p.k=0;
+   msg=null;save();quiz();if(p.o[n][j]===0)setTimeout(()=>{if(view==='quiz'&&qi===i&&S.p[i]===p&&p.n===n){msg=null;if(n===19)rate();else{p.n++;save();quiz()}}},1300)}
+  else if(b.dataset.n){msg=null;if(n===19)rate();else{p.n++;save();quiz()}}}
+}
+function rate(){
+ view='rate';const i=qi,p=S.p[i],s=p.s,st=stars(s);p.fin=true;if(s>S.b[i])S.b[i]=s;save();
+ const C=2*Math.PI*60,R=[null,['#ef4444','#f97316'],['#f97316','#f59e0b'],['#3b82f6','#06b6d4'],['#22c55e','#84cc16'],['#a855f7','#ec4899']][st];
+ app.innerHTML=`<div class="w" style="--g:linear-gradient(135deg,${R[0]},${R[1]})"><div class="rate"><div class="re">${RE[st]}</div><div class="rtag">${IC[i]} ${N[i]}</div><div class="ring" style="width:190px;height:190px;margin:8px auto"><svg viewBox="0 0 150 150"><defs><linearGradient id="r2"><stop offset="0" stop-color="${R[0]}"/><stop offset="1" stop-color="${R[1]}"/></linearGradient></defs><circle cx="75" cy="75" r="60" fill="none" stroke="#e3e7f6" stroke-width="14"/><circle class="fg" id="f2" cx="75" cy="75" r="60" fill="none" stroke="url(#r2)" stroke-width="14" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="c"><b>${s}</b><span>out of 20</span></div></div>
+ <div class="stars" aria-label="${st} of 5 stars">${[1,2,3,4,5].map(k=>`<i class="${k<=st?'on':''}" style="animation-delay:${.5+k*.12}s">★</i>`).join('')}</div><h2>${LB[st]}</h2><p>${MS[st]}</p><div class="stats"><div><b>${s}</b><small>Correct</small></div><div><b>${20-s}</b><small>Missed</small></div><div><b>${s*5}</b><small>Points</small></div></div>
+ <div class="row"><button class="btn" data-t="1" style="background:var(--g)">Try again</button><button class="btn o" data-h="1">All quizzes</button></div></div></div>`;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{$('#f2').style.strokeDashoffset=C*(1-s/20)}));
+ app.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.h)home();else if(b.dataset.t){S.p[i]=null;start(i)}}
+}
+home();
+</script></body></html>
